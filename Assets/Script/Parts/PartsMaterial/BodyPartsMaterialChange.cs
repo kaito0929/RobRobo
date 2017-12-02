@@ -40,7 +40,7 @@ public class BodyPartsMaterialChange : MonoBehaviour
     {
         if (photonView.isMine)
         {
-            GetComponent<Renderer>().material = PartsMaterial[MaterialNumber];
+            photonView.RPC("MaterialChange", PhotonTargets.All);
 
             ////装備の状態に応じてスコアを変更
             switch (MaterialNumber)
@@ -57,4 +57,29 @@ public class BodyPartsMaterialChange : MonoBehaviour
             }
         }
     }
+
+    [PunRPC]
+    void MaterialChange()
+    {
+        GetComponent<Renderer>().material = PartsMaterial[MaterialNumber];
+    }
+
+
+    //変数の同期
+    void OnPhotonSerializeView(PhotonStream i_stream, PhotonMessageInfo i_info)
+    {
+        if (i_stream.isWriting)
+        {
+            //データの送信
+            i_stream.SendNext(this.MaterialNumber);
+            i_stream.SendNext(this.BodyPartsPoint);
+        }
+        else
+        {
+            //データの受信
+            this.MaterialNumber = (int)i_stream.ReceiveNext();
+            this.BodyPartsPoint = (int)i_stream.ReceiveNext();
+        }
+    }
+
 }

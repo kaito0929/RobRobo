@@ -18,8 +18,8 @@ public class HeadPartsMaterialChange : MonoBehaviour
     //マテリアルを切り替える数値
     public int MaterialNumber;
 
-    //頭装備に振り分けられたスコア
-    public int HeadPartsScore;
+    //頭装備に振り分けられたポイント
+    public int HeadPartsPoint;
 
     //キャラにアタッチされるPhotonViewへの参照
     private PhotonView photonView = null;
@@ -39,21 +39,46 @@ public class HeadPartsMaterialChange : MonoBehaviour
     {
         if (photonView.isMine)
         {
-            GetComponent<Renderer>().material = PartsMaterial[MaterialNumber];
+            photonView.RPC("MaterialChange", PhotonTargets.All);
 
             ////装備の状態に応じてスコアを変更
             switch (MaterialNumber)
             {
                 case 0:
-                    HeadPartsScore = 1;
+                    HeadPartsPoint = 1;
                     break;
                 case 1:
-                    HeadPartsScore = 2;
+                    HeadPartsPoint = 2;
                     break;
                 case 2:
-                    HeadPartsScore = 3;
+                    HeadPartsPoint = 3;
                     break;
             }
         }
     }
+
+    [PunRPC]
+    void MaterialChange()
+    {
+        GetComponent<Renderer>().material = PartsMaterial[MaterialNumber];
+    }
+
+
+    //変数の同期
+    void OnPhotonSerializeView(PhotonStream i_stream, PhotonMessageInfo i_info)
+    {
+        if (i_stream.isWriting)
+        {
+            //データの送信
+            i_stream.SendNext(this.MaterialNumber);
+            i_stream.SendNext(this.HeadPartsPoint);
+        }
+        else
+        {
+            //データの受信
+            this.MaterialNumber = (int)i_stream.ReceiveNext();
+            this.HeadPartsPoint = (int)i_stream.ReceiveNext();
+        }
+    }
+
 }
