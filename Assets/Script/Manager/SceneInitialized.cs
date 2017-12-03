@@ -83,9 +83,9 @@ public class SceneInitialized : MonoBehaviour
         //実行されない場合を考慮して自分で一回実行する
         CheckAllPlayerState();
 
-        pos[0] = new Vector3(6, 4, 0);
-        pos[1] = new Vector3(-5, 4, 0);
-        pos[2] = new Vector3(6, 4, 0);
+        pos[0] = new Vector3(-24, 2, 24);
+        pos[1] = new Vector3(-24, 2, 24);
+        pos[2] = new Vector3(24, 2, 24);
         pos[3] = new Vector3(6, -1, 0);
         pos[4] = new Vector3(-5, -1, 0);
 
