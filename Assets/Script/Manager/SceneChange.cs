@@ -21,7 +21,7 @@ public class SceneChange : MonoBehaviour
         //0以下、つまり指定人数集まった場合に画面遷移を開始
         if (gameStart.GetPlayerNecessaryNum() <= 0)
         {
-            SceneManager.LoadScene("DemoB");
+            SceneManager.LoadScene("Main");
         }
     }
 }

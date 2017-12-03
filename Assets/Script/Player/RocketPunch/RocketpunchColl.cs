@@ -89,7 +89,7 @@ public class RocketpunchColl : MonoBehaviour
                     //それぞれの部位にぶつかったフラグをtrueにする
                     HeadPartsPunchCollFlag = true;
                     //衝突した装備のItemRankスクリプト内の変数を代入
-                    HeadRankNum = other.GetComponent<ItemRank>().MaterialNumber;
+                    HeadRankNum = other.GetComponent<HeadPartsMaterialChange>().MaterialNumber;
                     //衝突した装備は表示を消しておく
                     other.gameObject.SetActive(false);
                 }
@@ -102,7 +102,7 @@ public class RocketpunchColl : MonoBehaviour
             if (other.gameObject.tag == "Body")
             {
                 BodyPartsPunchCollFlag = true;
-                BodyRankNum = other.GetComponent<ItemRank>().MaterialNumber;
+                BodyRankNum = other.GetComponent<BodyPartsMaterialChange>().MaterialNumber;
                 other.gameObject.SetActive(false);
             }
 
@@ -117,7 +117,7 @@ public class RocketpunchColl : MonoBehaviour
                     other.gameObject != ArmPartsObj[5])
                 {
                     ArmPartsPunchCollFlag = true;
-                    ArmRankNum = other.GetComponent<ItemRank>().MaterialNumber;
+                    ArmRankNum = other.GetComponent<ArmPartsMaterialChange>().MaterialNumber;
                     other.gameObject.SetActive(false);
                 }
             }
@@ -126,7 +126,7 @@ public class RocketpunchColl : MonoBehaviour
             if (other.gameObject.tag == "Leg")
             {
                 LegPartsPunchCollFlag = true;
-                LegRankNum = other.GetComponent<ItemRank>().MaterialNumber;
+                LegRankNum = other.GetComponent<LegPartsMaterialChange>().MaterialNumber;
                 other.gameObject.SetActive(false);
             }
         }
