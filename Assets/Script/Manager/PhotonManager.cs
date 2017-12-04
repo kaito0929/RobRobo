@@ -6,7 +6,10 @@ using UnityEngine.UI;
 public class PhotonManager : Photon.MonoBehaviour
 {
     //Photonの接続状況を表示するテキストの画像
-    //public Image[] StateTextImage = new Image[3];
+    public Image[] StateTextImage = new Image[3];
+    private Vector3 pos;
+
+    public bool RoomInFlag;
 
     //Photonに接続するコード
     void Start()
@@ -19,10 +22,13 @@ public class PhotonManager : Photon.MonoBehaviour
         //出さないようにすることが出来るらしい
         PhotonNetwork.ConnectUsingSettings("v1.0");
 
-        //for (int i = 0; i < 3; i++)
-        //{
-        //    StateTextImage[i].gameObject.SetActive(false);
-        //}
+        for (int i = 0; i < 3; i++)
+        {
+            StateTextImage[i].gameObject.SetActive(false);
+        }
+
+        pos = new Vector3(0.0f, 0.0f, 0.0f);
+        RoomInFlag = false;
     }
     //PhotonServerSettingsのAuto-Join Lobbyにチェックを入れていると
     //自動的にロビーに入るようになっている
@@ -35,7 +41,7 @@ public class PhotonManager : Photon.MonoBehaviour
         //既存のルームにランダムで入室
         PhotonNetwork.JoinRandomRoom();
         Debug.Log("PhotonManager OnJoinedLobby");
-        //StateTextImage[0].gameObject.SetActive(true);
+        StateTextImage[0].gameObject.SetActive(true);
     }
 
     //入室失敗時に呼ばれるコールバック
@@ -45,17 +51,20 @@ public class PhotonManager : Photon.MonoBehaviour
         //CreateRoomでルームを作成
         PhotonNetwork.CreateRoom("RoomName", new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 4 }, null);
         Debug.Log("PhotonManager CreateRoom");
-        //StateTextImage[0].gameObject.SetActive(false);
-        //StateTextImage[1].gameObject.SetActive(true);
+        StateTextImage[0].gameObject.SetActive(false);
+        StateTextImage[1].gameObject.SetActive(true);
     }
 
     //ルーム入室した時に呼ばれるコールバックメソッド
     void OnJoinedRoom()
     {
         Debug.Log("PhotonManager OnJoinedRoom");
-        //StateTextImage[0].gameObject.SetActive(false);
-        //StateTextImage[1].gameObject.SetActive(false);
-        //StateTextImage[2].gameObject.SetActive(true);
+        StateTextImage[0].gameObject.SetActive(false);
+        StateTextImage[1].gameObject.SetActive(false);
+        StateTextImage[2].gameObject.SetActive(true);
+        //キャラクターを生成
+        PhotonNetwork.Instantiate("robo_Matching", pos, Quaternion.identity, 0);
+        RoomInFlag = true;
     }
 
 }

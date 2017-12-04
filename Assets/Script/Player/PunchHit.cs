@@ -29,14 +29,14 @@ public class PunchHit : MonoBehaviour
     }
 
     // 初期化---------------------------------------------------------------------------------------------
-    void Start ()
+    void Start()
     {
         //Animatorコンポーネントを取得する
         anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
-    void Update ()
+    void Update()
     {
         //持ち主でないのなら制御させない
         if (!photonView.isMine)
@@ -49,14 +49,14 @@ public class PunchHit : MonoBehaviour
         anim.SetBool("Hit", PunchHitFlag);
 
         //PunchHitFlagがtrue、つまり攻撃を喰らった場合に処理
-        if(PunchHitFlag==true)
+        if (PunchHitFlag == true)
         {
             //無敵時間のカウントを開始
             InvincibleCount += Time.deltaTime;
         }
 
         //無敵時間が2.0fを超えたならば処理
-        if(InvincibleCount >= 2.0f)
+        if (InvincibleCount >= 2.0f)
         {
             //フラグをfalseにしてアニメーションを切り替える
             PunchHitFlag = false;
@@ -87,5 +87,4 @@ public class PunchHit : MonoBehaviour
             }
         }
     }
-
 }

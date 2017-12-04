@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 //================================================
 //プレイヤーのカメラ操作を行うスクリプト
@@ -62,51 +63,89 @@ public class CameraWork : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (photonView.isMine)
+        if (SceneManager.GetActiveScene().name == "Main" || SceneManager.GetActiveScene().name == "MatchingRoom")
         {
-
-            //カメラの操作用関数
-            CameraOperation();
-
-            //カメラの状態の切り替え
-            switch (cameraState)
+            if (photonView.isMine)
             {
-                case CAMERA_STATE.NORMAL://通常状態のカメラ
+                //カメラの操作用関数
+                CameraOperation();
 
-                    //カメラの位置をある程度離しておく
-                    DistanceToPlayer = 3f;
-                    //カメラの位置はプレイヤーを中心に据える
-                    SlideDistanceM = 0.0f;
+                //カメラの状態の切り替え
+                switch (cameraState)
+                {
+                    case CAMERA_STATE.NORMAL://通常状態のカメラ
 
-                    //照準モードではないのでターゲットカーソルは非表示にする
-                    //TargetCursor.gameObject.SetActive(false);
+                        //カメラの位置をある程度離しておく
+                        DistanceToPlayer = 3f;
+                        //カメラの位置はプレイヤーを中心に据える
+                        SlideDistanceM = 0.0f;
 
-                    anim.SetBool("Aim", false);
+                        //照準モードではないのでターゲットカーソルは非表示にする
+                        //TargetCursor.gameObject.SetActive(false);
 
-                    //ボタンを押すことで状態が切り替わる
-                    if (Input.GetKeyDown(KeyCode.Space))
-                    {
-                        cameraState = CAMERA_STATE.AIM;
-                    }
-                    break;
-                case CAMERA_STATE.AIM://照準モード
+                        anim.SetBool("Aim", false);
 
-                    //照準を合わせるモードなのでカメラをプレイヤーの近くに移動
-                    DistanceToPlayer = 1.5f;
-                    //カメラを右に少しずらす
-                    SlideDistanceM = 0.3f;
+                        //ボタンを押すことで状態が切り替わる
+                        if (Input.GetKeyDown(KeyCode.Space))
+                        {
+                            cameraState = CAMERA_STATE.AIM;
+                        }
+                        break;
+                    case CAMERA_STATE.AIM://照準モード
 
-                    //照準モードなのでターゲットカーソルを表示
-                    //TargetCursor.gameObject.SetActive(true);
+                        //照準を合わせるモードなのでカメラをプレイヤーの近くに移動
+                        DistanceToPlayer = 1.5f;
+                        //カメラを右に少しずらす
+                        SlideDistanceM = 0.3f;
 
-                    anim.SetBool("Aim", true);
+                        //照準モードなのでターゲットカーソルを表示
+                        //TargetCursor.gameObject.SetActive(true);
 
-                    //ボタンを押すことで状態が切り替わる
-                    if (Input.GetKeyDown(KeyCode.Space))
-                    {
-                        cameraState = CAMERA_STATE.NORMAL;
-                    }
-                    break;
+                        anim.SetBool("Aim", true);
+
+                        //ボタンを押すことで状態が切り替わる
+                        if (Input.GetKeyDown(KeyCode.Space))
+                        {
+                            cameraState = CAMERA_STATE.NORMAL;
+                        }
+                        break;
+                }
+            }
+        }
+        else
+        {
+            if (photonView.isMine)
+            {
+                cameraTransform = Camera.main.transform;
+
+                //カメラの横回転のための変数
+                var rotX = 0.0f;
+
+                //カメラの上下方向変換用の変数
+                var rotY = 0.0f;
+                var lookAt = gameObject.transform.position + Vector3.up * HeightM;
+
+                //回転
+                cameraTransform.RotateAround(lookAt, Vector3.up, rotX);
+                //カメラがプレイヤーの真上や真下にある時にそれ以上回転させないようにする
+                if (cameraTransform.forward.y > 0.9f && rotY < 0)
+                {
+                    rotY = 0;
+                }
+
+                if (cameraTransform.forward.y < -0.9f && rotY > 0)
+                {
+                    rotY = 0;
+                }
+                cameraTransform.transform.RotateAround(lookAt, cameraTransform.transform.right, rotY);
+
+                //カメラとプレイヤーとの間の距離を調整
+                cameraTransform.transform.position = lookAt - cameraTransform.transform.forward * DistanceToPlayer;
+                //注視点の設定
+                cameraTransform.transform.LookAt(lookAt);
+                //カメラを横にずらして中央を開ける
+                cameraTransform.transform.position = cameraTransform.transform.position + cameraTransform.transform.right * SlideDistanceM;
+
             }
         }
     }
