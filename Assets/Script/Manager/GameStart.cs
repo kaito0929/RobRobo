@@ -34,6 +34,9 @@ public class GameStart : MonoBehaviour
         PlayerNecessaryNum = 1;
     }
 
+    void Update()
+    {
+    }
 
     //部屋にプレイヤーが入ってくると呼ばれるコールバック
     void OnPhotonPlayerConnected(PhotonPlayer newPlayer)

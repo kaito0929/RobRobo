@@ -24,7 +24,6 @@ public class PlayerNumberTag : MonoBehaviour
     {
         //プレイヤーIDを取得
         PlayerWhoIsIt = PhotonNetwork.player.ID;
-        GameObject.Find("num").GetComponent<Text>().text = "" + PlayerWhoIsIt;
     }
 
     // Update is called once per frame
@@ -47,6 +46,14 @@ public class PlayerNumberTag : MonoBehaviour
             {
                 photonView.RPC("GetTag2", PhotonTargets.All);
             }
+            if (PlayerWhoIsIt == 3)
+            {
+                photonView.RPC("GetTag3", PhotonTargets.All);
+            }
+            if (PlayerWhoIsIt == 4)
+            {
+                photonView.RPC("GetTag4", PhotonTargets.All);
+            }
         }
     }
 
@@ -64,5 +71,18 @@ public class PlayerNumberTag : MonoBehaviour
     {
         gameObject.tag = "Player2";
     }
+
+    [PunRPC]
+    private void GetTag3()
+    {
+        gameObject.tag = "Player3";
+    }
+
+    [PunRPC]
+    private void GetTag4()
+    {
+        gameObject.tag = "Player4";
+    }
+
 
 }

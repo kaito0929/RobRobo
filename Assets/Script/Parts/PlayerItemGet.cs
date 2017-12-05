@@ -86,7 +86,10 @@ public class PlayerItemGet : MonoBehaviour
                     other.gameObject.SetActive(false);
                     //自分の装着する装備のマテリアルを衝突したオブジェクトの
                     //マテリアルと同じにする
-                    headPartsMaterialChange.MaterialNumber = other.gameObject.GetComponent<HeadPartsMaterialChange>().MaterialNumber;
+                    if (headPartsMaterialChange.MaterialNumber <= other.gameObject.GetComponent<HeadPartsMaterialChange>().MaterialNumber)
+                    {
+                        headPartsMaterialChange.MaterialNumber = other.gameObject.GetComponent<HeadPartsMaterialChange>().MaterialNumber;
+                    }
                 }
             }
             //以下の処理も上記の頭装備と基本的に変わらないので
@@ -99,7 +102,11 @@ public class PlayerItemGet : MonoBehaviour
                 {
                     BodyPartsGetFlag = true;
                     other.gameObject.SetActive(false);
-                    bodyPartsMaterialChange.MaterialNumber = other.gameObject.GetComponent<BodyPartsMaterialChange>().MaterialNumber;
+
+                    if (bodyPartsMaterialChange.MaterialNumber <= other.gameObject.GetComponent<BodyPartsMaterialChange>().MaterialNumber)
+                    {
+                        bodyPartsMaterialChange.MaterialNumber = other.gameObject.GetComponent<BodyPartsMaterialChange>().MaterialNumber;
+                    }
                 }
             }
 
@@ -115,9 +122,13 @@ public class PlayerItemGet : MonoBehaviour
                 {
                     ArmPartsGetFlag = true;
                     other.gameObject.SetActive(false);
-                    for (int i = 0; i < 6; i++)
+
+                    if (armPartsMaterialChange[0].MaterialNumber <= other.gameObject.GetComponent<ArmPartsMaterialChange>().MaterialNumber)
                     {
-                        armPartsMaterialChange[i].MaterialNumber = other.gameObject.GetComponent<ArmPartsMaterialChange>().MaterialNumber;
+                        for (int i = 0; i < 6; i++)
+                        {
+                            armPartsMaterialChange[i].MaterialNumber = other.gameObject.GetComponent<ArmPartsMaterialChange>().MaterialNumber;
+                        }
                     }
                 }
             }
@@ -132,9 +143,13 @@ public class PlayerItemGet : MonoBehaviour
                 {
                     LegPartsGetFlag = true;
                     other.gameObject.SetActive(false);
-                    for (int i = 0; i < 2; i++)
+
+                    if (legPartsMaterialChange[0].MaterialNumber <= other.gameObject.GetComponent<LegPartsMaterialChange>().MaterialNumber)
                     {
-                        legPartsMaterialChange[i].MaterialNumber = other.gameObject.GetComponent<LegPartsMaterialChange>().MaterialNumber;
+                        for (int i = 0; i < 3; i++)
+                        {
+                            legPartsMaterialChange[i].MaterialNumber = other.gameObject.GetComponent<LegPartsMaterialChange>().MaterialNumber;
+                        }
                     }
                 }
             }

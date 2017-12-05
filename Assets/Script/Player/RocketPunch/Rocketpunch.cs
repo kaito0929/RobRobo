@@ -134,8 +134,12 @@ public class Rocketpunch : MonoBehaviour
                 itemGet.HeadPartsGetFlag = true;
                 //戻ってきたのでパンチのゲットフラグをfalseに
                 rocketpunchColl.HeadPartsPunchCollFlag = false;
-                //ロケットパンチで奪うことの出来た装備のランクを反映
-                headPartsMaterialChange.MaterialNumber = rocketpunchColl.HeadRankNum;
+
+                if (headPartsMaterialChange.MaterialNumber <= rocketpunchColl.HeadRankNum)
+                {
+                    //ロケットパンチで奪うことの出来た装備のランクを反映
+                    headPartsMaterialChange.MaterialNumber = rocketpunchColl.HeadRankNum;
+                }
             }
 
             //他の装備の処理も基本的に同じなのでコメントは省略
@@ -145,7 +149,11 @@ public class Rocketpunch : MonoBehaviour
             {
                 itemGet.BodyPartsGetFlag = true;
                 rocketpunchColl.BodyPartsPunchCollFlag = false;
-                bodyPartsMaterialChange.MaterialNumber = rocketpunchColl.BodyRankNum;
+
+                if (bodyPartsMaterialChange.MaterialNumber <= rocketpunchColl.BodyRankNum)
+                {
+                    bodyPartsMaterialChange.MaterialNumber = rocketpunchColl.BodyRankNum;
+                }
             }
 
             //腕装備----------------------------------------------------------------
@@ -154,9 +162,12 @@ public class Rocketpunch : MonoBehaviour
                 itemGet.ArmPartsGetFlag = true;
                 rocketpunchColl.ArmPartsPunchCollFlag = false;
 
-                for (int i = 0; i < 6; i++)
+                if (armPartsMaterialChange[0].MaterialNumber <= rocketpunchColl.ArmRankNum)
                 {
-                    armPartsMaterialChange[i].MaterialNumber = rocketpunchColl.ArmRankNum;
+                    for (int i = 0; i < 6; i++)
+                    {
+                        armPartsMaterialChange[i].MaterialNumber = rocketpunchColl.ArmRankNum;
+                    }
                 }
             }
 
@@ -166,9 +177,12 @@ public class Rocketpunch : MonoBehaviour
                 itemGet.LegPartsGetFlag = true;
                 rocketpunchColl.LegPartsPunchCollFlag = false;
 
-                for (int i = 0; i < 4; i++)
+                if (legPartsMaterialChange[0].MaterialNumber <= rocketpunchColl.LegRankNum)
                 {
-                    legPartsMaterialChange[i].MaterialNumber = rocketpunchColl.LegRankNum;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        legPartsMaterialChange[i].MaterialNumber = rocketpunchColl.LegRankNum;
+                    }
                 }
             }
         }

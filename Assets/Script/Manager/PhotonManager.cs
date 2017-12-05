@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//================================================
+//Photonの接続や部屋への接続などを行うスクリプト
+//================================================
+
 public class PhotonManager : Photon.MonoBehaviour
 {
     //Photonの接続状況を表示するテキストの画像
-    public Image[] StateTextImage = new Image[3];
+    public Image[] StateTextImage = new Image[2];
     private Vector3 pos;
 
     public bool RoomInFlag;
@@ -22,7 +26,7 @@ public class PhotonManager : Photon.MonoBehaviour
         //出さないようにすることが出来るらしい
         PhotonNetwork.ConnectUsingSettings("v1.0");
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 2; i++)
         {
             StateTextImage[i].gameObject.SetActive(false);
         }
@@ -61,7 +65,6 @@ public class PhotonManager : Photon.MonoBehaviour
         Debug.Log("PhotonManager OnJoinedRoom");
         StateTextImage[0].gameObject.SetActive(false);
         StateTextImage[1].gameObject.SetActive(false);
-        StateTextImage[2].gameObject.SetActive(true);
         //キャラクターを生成
         PhotonNetwork.Instantiate("robo_Matching", pos, Quaternion.identity, 0);
         RoomInFlag = true;

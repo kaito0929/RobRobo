@@ -28,10 +28,10 @@ public class PlayerController : MonoBehaviour
     //baselayerで使われる、アニメーターの現在の状態の参照
     private AnimatorStateInfo currentBaseState;
 
-    //キャラにアタッチされるPhotonViewへの参照
-    private PhotonView　photonView = null;
-
     private Vector3[] pos = new Vector3[4];
+
+    //キャラにアタッチされるPhotonViewへの参照
+    private PhotonView photonView = null;
 
     void Awake()
     {

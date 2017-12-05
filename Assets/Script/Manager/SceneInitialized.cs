@@ -68,7 +68,7 @@ public class SceneInitialized : MonoBehaviour
     //キャラの初期位置
     //プレイヤーのIDで位置を決定させるので
     //指定人数より一つ多く宣言しておく
-    private Vector3[] pos = new Vector3[5];
+    private Vector3[] pos = new Vector3[6];
 
     //プレイヤーID取得用の変数
     private static int PlayerWhoIsIt;
@@ -86,8 +86,9 @@ public class SceneInitialized : MonoBehaviour
         pos[0] = new Vector3(-24, 2, 24);
         pos[1] = new Vector3(-24, 2, 24);
         pos[2] = new Vector3(24, 2, 24);
-        pos[3] = new Vector3(6, -1, 0);
-        pos[4] = new Vector3(-5, -1, 0);
+        pos[3] = new Vector3(-24, 2, -24);
+        pos[4] = new Vector3(24, 2, -24);
+        pos[5] = new Vector3(24, 2, -24);
 
         //プレイヤーのIDを取得する
         PlayerWhoIsIt = PhotonNetwork.player.ID;
