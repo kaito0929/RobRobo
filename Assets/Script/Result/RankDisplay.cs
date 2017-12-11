@@ -54,13 +54,21 @@ public class RankDisplay : MonoBehaviour
 
                 switch (playerPoint.PlayerRank)
                 {
-                    case 0:
+                    case 3:
                         NumberImage.GetComponent<Image>().sprite = image[3];
                         RankImage.GetComponent<Image>().sprite = image[0];
                         break;
-                    case 1:
+                    case 2:
                         NumberImage.GetComponent<Image>().sprite = image[4];
                         RankImage.GetComponent<Image>().sprite = image[1];
+                        break;
+                    case 1:
+                        NumberImage.GetComponent<Image>().sprite = image[5];
+                        RankImage.GetComponent<Image>().sprite = image[2];
+                        break;
+                    case 0:
+                        NumberImage.GetComponent<Image>().sprite = image[6];
+                        RankImage.GetComponent<Image>().sprite = image[2];
                         break;
                 }
 

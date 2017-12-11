@@ -10,14 +10,11 @@ public class ArmColl : MonoBehaviour
 {
     // 変数宣言---------------------------------------------------------------------------------------------
 
-    //自キャラのロケットパンチ
-    public GameObject PunchObj;
     //PlayerItemGetスクリプトの参照
     public PlayerItemGet playerItemGet;
 
     //キャラにアタッチされるPhotonViewへの参照
     private PhotonView photonView = null;
-
     void Awake()
     {
         photonView = GetComponent<PhotonView>();
@@ -32,13 +29,8 @@ public class ArmColl : MonoBehaviour
             //ロケットパンチが当たった時の処理
             if (other.gameObject.tag == "Punch")
             {
-                //腕の装備を着けている場合に処理される
-                if (other.gameObject != PunchObj && playerItemGet.ArmPartsGetFlag == true)
-                {
-                    //フラグをfalseにして装備が外れたように見せる
-                    playerItemGet.ArmPartsGetFlag = false;
-                    Debug.Log("Hit");
-                }
+                //フラグをfalseにして装備が外れたように見せる
+                playerItemGet.ArmPartsGetFlag = false;
             }
         }
     }

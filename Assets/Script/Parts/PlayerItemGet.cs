@@ -44,9 +44,12 @@ public class PlayerItemGet : MonoBehaviour
     //足装備
     public LegPartsMaterialChange[] legPartsMaterialChange = new LegPartsMaterialChange[4];
 
+
+    public AudioSource sound01;
+
+
     //キャラにアタッチされるPhotonViewへの参照
     private PhotonView photonView = null;
-
     void Awake()
     {
         photonView = GetComponent<PhotonView>();
@@ -72,7 +75,6 @@ public class PlayerItemGet : MonoBehaviour
         //isMainで自分自身の操作しか受け付けないようにしておく
         if (photonView.isMine)
         {
-
             //落ちている装備アイテムを拾った際に行う処理
             //頭装備----------------------------------------------------------------------------------
             if (other.gameObject.tag == "Head")
@@ -82,12 +84,12 @@ public class PlayerItemGet : MonoBehaviour
                 {
                     //装備を手に入れたので、自分の装着している装備を表示
                     HeadPartsGetFlag = true;
-                    //当たったオブジェクトの表示を消す
-                    other.gameObject.SetActive(false);
-                    //自分の装着する装備のマテリアルを衝突したオブジェクトの
-                    //マテリアルと同じにする
-                    if (headPartsMaterialChange.MaterialNumber <= other.gameObject.GetComponent<HeadPartsMaterialChange>().MaterialNumber)
+                    sound01.PlayOneShot(sound01.clip);
+
+                    if (headPartsMaterialChange.MaterialNumber < other.gameObject.GetComponent<HeadPartsMaterialChange>().MaterialNumber)
                     {
+                        //自分の装着する装備のマテリアルを衝突したオブジェクトの
+                        //マテリアルと同じにする
                         headPartsMaterialChange.MaterialNumber = other.gameObject.GetComponent<HeadPartsMaterialChange>().MaterialNumber;
                     }
                 }
@@ -101,9 +103,9 @@ public class PlayerItemGet : MonoBehaviour
                 if (other.gameObject != BodyPartsObj)
                 {
                     BodyPartsGetFlag = true;
-                    other.gameObject.SetActive(false);
+                    sound01.PlayOneShot(sound01.clip);
 
-                    if (bodyPartsMaterialChange.MaterialNumber <= other.gameObject.GetComponent<BodyPartsMaterialChange>().MaterialNumber)
+                    if (bodyPartsMaterialChange.MaterialNumber < other.gameObject.GetComponent<BodyPartsMaterialChange>().MaterialNumber)
                     {
                         bodyPartsMaterialChange.MaterialNumber = other.gameObject.GetComponent<BodyPartsMaterialChange>().MaterialNumber;
                     }
@@ -121,9 +123,8 @@ public class PlayerItemGet : MonoBehaviour
                     other.gameObject != ArmPartsObj[5])
                 {
                     ArmPartsGetFlag = true;
-                    other.gameObject.SetActive(false);
-
-                    if (armPartsMaterialChange[0].MaterialNumber <= other.gameObject.GetComponent<ArmPartsMaterialChange>().MaterialNumber)
+                    sound01.PlayOneShot(sound01.clip);
+                    if (armPartsMaterialChange[0].MaterialNumber < other.gameObject.GetComponent<ArmPartsMaterialChange>().MaterialNumber)
                     {
                         for (int i = 0; i < 6; i++)
                         {
@@ -142,11 +143,10 @@ public class PlayerItemGet : MonoBehaviour
                     other.gameObject != LegPartsObj[3])
                 {
                     LegPartsGetFlag = true;
-                    other.gameObject.SetActive(false);
-
-                    if (legPartsMaterialChange[0].MaterialNumber <= other.gameObject.GetComponent<LegPartsMaterialChange>().MaterialNumber)
+                    sound01.PlayOneShot(sound01.clip);
+                    if (legPartsMaterialChange[0].MaterialNumber < other.gameObject.GetComponent<LegPartsMaterialChange>().MaterialNumber)
                     {
-                        for (int i = 0; i < 3; i++)
+                        for (int i = 0; i < 4; i++)
                         {
                             legPartsMaterialChange[i].MaterialNumber = other.gameObject.GetComponent<LegPartsMaterialChange>().MaterialNumber;
                         }
@@ -157,8 +157,6 @@ public class PlayerItemGet : MonoBehaviour
 
         }
     }
-
-
 
     //変数の同期
     void OnPhotonSerializeView(PhotonStream i_stream, PhotonMessageInfo i_info)

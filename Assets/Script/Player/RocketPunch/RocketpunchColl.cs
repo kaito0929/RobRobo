@@ -90,8 +90,6 @@ public class RocketpunchColl : MonoBehaviour
                     HeadPartsPunchCollFlag = true;
                     //衝突した装備のItemRankスクリプト内の変数を代入
                     HeadRankNum = other.GetComponent<HeadPartsMaterialChange>().MaterialNumber;
-                    //衝突した装備は表示を消しておく
-                    other.gameObject.SetActive(false);
                 }
             }
             //他の部位の装備の処理が以下に描かれているが
@@ -103,7 +101,6 @@ public class RocketpunchColl : MonoBehaviour
             {
                 BodyPartsPunchCollFlag = true;
                 BodyRankNum = other.GetComponent<BodyPartsMaterialChange>().MaterialNumber;
-                other.gameObject.SetActive(false);
             }
 
             // 腕装備----------------------------------------------------------------------------------
@@ -118,7 +115,6 @@ public class RocketpunchColl : MonoBehaviour
                 {
                     ArmPartsPunchCollFlag = true;
                     ArmRankNum = other.GetComponent<ArmPartsMaterialChange>().MaterialNumber;
-                    other.gameObject.SetActive(false);
                 }
             }
 
@@ -127,7 +123,6 @@ public class RocketpunchColl : MonoBehaviour
             {
                 LegPartsPunchCollFlag = true;
                 LegRankNum = other.GetComponent<LegPartsMaterialChange>().MaterialNumber;
-                other.gameObject.SetActive(false);
             }
         }
     }

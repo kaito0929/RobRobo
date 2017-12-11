@@ -42,7 +42,8 @@ public class CameraWork : MonoBehaviour
     //キャラにアタッチされるアニメーターへの参照
     private Animator anim;
 
-    //public Image TargetCursor;
+    //PS4コントローラーのボタンを押したかのフラグ
+    private bool ButtonPushFlag;
 
     //キャラにアタッチされるPhotonViewへの参照
     private PhotonView photonView = null;
@@ -58,6 +59,8 @@ public class CameraWork : MonoBehaviour
         cameraTransform = Camera.main.transform;
         //Animatorコンポーネントを取得する
         anim = GetComponent<Animator>();
+
+        ButtonPushFlag = false;
     }
 
     // Update is called once per frame
@@ -85,11 +88,31 @@ public class CameraWork : MonoBehaviour
 
                         anim.SetBool("Aim", false);
 
-                        //ボタンを押すことで状態が切り替わる
+
+                        //状態の切り替え
+                        //PS4コントローラー操作-------------------------------------------------------
+                        if (Input.GetButton("R_Button"))
+                        {
+                            if (ButtonPushFlag == false)
+                            {
+                                cameraState = CAMERA_STATE.AIM;
+                                ButtonPushFlag = true;
+                            }
+                        }
+                        else
+                        {
+                            ButtonPushFlag = false;
+                        }
+                        //-----------------------------------------------------------------------------
+
+                        //キーボード操作--------------------------------------------------------------
                         if (Input.GetKeyDown(KeyCode.Space))
                         {
                             cameraState = CAMERA_STATE.AIM;
                         }
+                        //-----------------------------------------------------------------------------
+
+
                         break;
                     case CAMERA_STATE.AIM://照準モード
 
@@ -103,11 +126,29 @@ public class CameraWork : MonoBehaviour
 
                         anim.SetBool("Aim", true);
 
-                        //ボタンを押すことで状態が切り替わる
+                        //状態の切り替え
+                        //PS4コントローラー操作-------------------------------------------------------
+                        if (Input.GetButton("R_Button"))
+                        {
+                            if (ButtonPushFlag == false)
+                            {
+                                cameraState = CAMERA_STATE.NORMAL;
+                                ButtonPushFlag = true;
+                            }
+                        }
+                        else
+                        {
+                            ButtonPushFlag = false;
+                        }
+                        //-----------------------------------------------------------------------------
+
+                        //キーボード操作--------------------------------------------------------------
                         if (Input.GetKeyDown(KeyCode.Space))
                         {
                             cameraState = CAMERA_STATE.NORMAL;
                         }
+                        //-----------------------------------------------------------------------------
+
                         break;
                 }
             }
@@ -161,11 +202,11 @@ public class CameraWork : MonoBehaviour
         //プレイヤーと同じ方向を向かせたいので
         //操作キーをプレイヤーの方向転換のキーと同じにする
         //出来れば変えておきたい
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetAxisRaw("Horizontal") > 0.1 || Input.GetAxisRaw("Horizontal2") > 0.1)
         {
             rotX += 1f * Time.deltaTime * RotationSensitivity;
         }
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetAxisRaw("Horizontal") < -0.1 || Input.GetAxisRaw("Horizontal2") < -0.1)
         {
             rotX -= 1f * Time.deltaTime * RotationSensitivity;
         }
@@ -173,11 +214,11 @@ public class CameraWork : MonoBehaviour
         //カメラの上下方向変換用の変数
         var rotY = 0.0f;
         //こっちはプレイヤーの向きとは独立させる
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetAxisRaw("Vertical2") > 0.1)
         {
             rotY += 1f * Time.deltaTime * RotationSensitivity;
         }
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetAxisRaw("Vertical2") < -0.1)
         {
             rotY -= 1f * Time.deltaTime * RotationSensitivity;
         }

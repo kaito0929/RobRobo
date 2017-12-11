@@ -39,8 +39,6 @@ public class HeadPartsMaterialChange : MonoBehaviour
     {
         if (photonView.isMine)
         {
-            photonView.RPC("MaterialChange", PhotonTargets.All);
-
             ////装備の状態に応じてスコアを変更
             switch (MaterialNumber)
             {
@@ -55,6 +53,9 @@ public class HeadPartsMaterialChange : MonoBehaviour
                     break;
             }
         }
+
+        GetComponent<Renderer>().material = PartsMaterial[MaterialNumber];
+
     }
 
     [PunRPC]

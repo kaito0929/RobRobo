@@ -56,6 +56,8 @@ public class Rocketpunch : MonoBehaviour
         photonView = GetComponent<PhotonView>();
     }
 
+    public AudioSource sound01;
+    public AudioSource sound02;
 
     // 初期化-----------------------------------------------------------------------------------------------
     void Start ()
@@ -102,14 +104,37 @@ public class Rocketpunch : MonoBehaviour
         //カメラの状態がAIMだとロケットパンチが発射できるようにする
         if (cameraWork.cameraState == CameraWork.CAMERA_STATE.AIM)
         {
+
             //パンチの発射
+            //PS4コントローラー操作-------------------------------------------------------
+            if (Input.GetButton("Circle"))
+            {
+                if (distance <= 0.1f)
+                {
+                    //パンチの角度をカメラの角度と同じにする
+                    RocketpunchObj.transform.rotation = cameraTransform.rotation;
+                    //フラグを操作
+                    PunchFlag = true;
+                    //ロケットパンチの発射音の再生
+                    sound01.PlayOneShot(sound01.clip);
+                }
+            }
+            //-----------------------------------------------------------------------------
+
+            //キーボード操作---------------------------------------------------------------
+            //コメントは上記と同じなのでコメントは省略
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                //パンチの角度をカメラの角度と同じにする
-                RocketpunchObj.transform.rotation = cameraTransform.rotation;
-                //フラグを操作
-                PunchFlag = true;
+                if (distance <= 0.1f)
+                {
+                    RocketpunchObj.transform.rotation = cameraTransform.rotation;
+                    PunchFlag = true;
+                    sound01.PlayOneShot(sound01.clip);
+                }
             }
+            //-----------------------------------------------------------------------------
+
+
         }
     }
 
@@ -122,6 +147,7 @@ public class Rocketpunch : MonoBehaviour
             //パンチが何かに衝突したフラグをfalseに
             if (rocketpunchColl.PunchCollFlag == true)
             {
+                sound02.PlayOneShot(sound02.clip);
                 //フラグをfalseにする
                 rocketpunchColl.PunchCollFlag = false;
             }
@@ -134,6 +160,7 @@ public class Rocketpunch : MonoBehaviour
                 itemGet.HeadPartsGetFlag = true;
                 //戻ってきたのでパンチのゲットフラグをfalseに
                 rocketpunchColl.HeadPartsPunchCollFlag = false;
+                sound02.PlayOneShot(sound02.clip);
 
                 if (headPartsMaterialChange.MaterialNumber <= rocketpunchColl.HeadRankNum)
                 {
@@ -149,6 +176,7 @@ public class Rocketpunch : MonoBehaviour
             {
                 itemGet.BodyPartsGetFlag = true;
                 rocketpunchColl.BodyPartsPunchCollFlag = false;
+                sound02.PlayOneShot(sound02.clip);
 
                 if (bodyPartsMaterialChange.MaterialNumber <= rocketpunchColl.BodyRankNum)
                 {
@@ -161,6 +189,7 @@ public class Rocketpunch : MonoBehaviour
             {
                 itemGet.ArmPartsGetFlag = true;
                 rocketpunchColl.ArmPartsPunchCollFlag = false;
+                sound02.PlayOneShot(sound02.clip);
 
                 if (armPartsMaterialChange[0].MaterialNumber <= rocketpunchColl.ArmRankNum)
                 {
@@ -176,6 +205,7 @@ public class Rocketpunch : MonoBehaviour
             {
                 itemGet.LegPartsGetFlag = true;
                 rocketpunchColl.LegPartsPunchCollFlag = false;
+                sound02.PlayOneShot(sound02.clip);
 
                 if (legPartsMaterialChange[0].MaterialNumber <= rocketpunchColl.LegRankNum)
                 {
@@ -185,8 +215,8 @@ public class Rocketpunch : MonoBehaviour
                     }
                 }
             }
-        }
 
+        }
     }
 
     //パンチの移動を処理する関数

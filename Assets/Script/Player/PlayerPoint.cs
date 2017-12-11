@@ -58,7 +58,7 @@ public class PlayerPoint : MonoBehaviour
             if (SceneManager.GetActiveScene().name == "Result")
             {
                 //順位が一番であれば勝利ポーズ
-                if (PlayerRank == 0)
+                if (PlayerRank == 3)
                 {
                     anim.SetBool("Victory", true);
                 }

@@ -25,8 +25,6 @@ public class PlayerController : MonoBehaviour
     private Vector3 velocity;
     //キャラにアタッチされるアニメーターへの参照
     private Animator anim;
-    //baselayerで使われる、アニメーターの現在の状態の参照
-    private AnimatorStateInfo currentBaseState;
 
     private Vector3[] pos = new Vector3[4];
 
@@ -68,21 +66,22 @@ public class PlayerController : MonoBehaviour
 
             //入力デバイスの水平軸をhで定義
             float h = 0.0f;
-            if (Input.GetKey(KeyCode.RightArrow))
+            if (Input.GetAxisRaw("Horizontal") > 0.1 || Input.GetAxisRaw("Horizontal2") > 0.1)
             {
                 h += 1f;
             }
-            if (Input.GetKey(KeyCode.LeftArrow))
+            if (Input.GetAxisRaw("Horizontal") < -0.1 || Input.GetAxisRaw("Horizontal2") < -0.1)
             {
                 h -= 1f;
             }
+
             //入力デバイスの垂直軸をvで定義
             float v = 0.0f;
-            if (Input.GetKey(KeyCode.UpArrow))
+            if (Input.GetAxisRaw("Vertical") > 0.1)
             {
                 v += 1f;
             }
-            if (Input.GetKey(KeyCode.DownArrow))
+            if (Input.GetAxisRaw("Vertical") < -0.1)
             {
                 v -= 1f;
             }
@@ -93,8 +92,6 @@ public class PlayerController : MonoBehaviour
             anim.SetFloat("Direction", h);
             //Animatorのモーション再生速度にAnimSpeedを設定する
             anim.speed = AnimSpeed;
-            //参照用のステート変数にBaseLayer(0)の現在のステートを設定する
-            currentBaseState = anim.GetCurrentAnimatorStateInfo(0);
 
 
             //キャラクターの移動処理

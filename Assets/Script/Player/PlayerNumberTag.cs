@@ -24,11 +24,7 @@ public class PlayerNumberTag : MonoBehaviour
     {
         //プレイヤーIDを取得
         PlayerWhoIsIt = PhotonNetwork.player.ID;
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
         //自分以外の操作を受け付けない
         //この処理を行わないとタグがそれぞれに付けることが出来ない
         if (photonView.isMine)
@@ -55,6 +51,13 @@ public class PlayerNumberTag : MonoBehaviour
                 photonView.RPC("GetTag4", PhotonTargets.All);
             }
         }
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
     }
 
 

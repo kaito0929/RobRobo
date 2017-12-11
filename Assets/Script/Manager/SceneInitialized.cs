@@ -73,6 +73,8 @@ public class SceneInitialized : MonoBehaviour
     //プレイヤーID取得用の変数
     private static int PlayerWhoIsIt;
 
+    public bool SceneChangeFlag;
+
     // Use this for initialization
     void Start ()
     {
@@ -97,6 +99,7 @@ public class SceneInitialized : MonoBehaviour
     //初期化処理
     void Initialize()
     {
+        SceneChangeFlag = true;
         //キャラクターを生成
         PhotonNetwork.Instantiate("robo", pos[PlayerWhoIsIt], Quaternion.identity, 0);
     }

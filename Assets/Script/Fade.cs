@@ -16,8 +16,6 @@ public class Fade : MonoBehaviour
 
     //フェードインを行う黒色のImage
     public Image FadeImage;
-    //最後に表示されるテキスト
-    public Image FadeText;
 
     //α値
     private float Alfa;
@@ -45,7 +43,7 @@ public class Fade : MonoBehaviour
         {
             //PhotonManagerスクリプト内のRoomInFlag（部屋に入れたかのフラグ）が
             //trueになった場合に処理を開始
-            if (photonManager.RoomInFlag == true)
+            if (photonManager.RoomInFlag == true && Alfa >= 0.0f)
             {
                 Alfa -= FadeSpeed;
             }
@@ -61,6 +59,5 @@ public class Fade : MonoBehaviour
         }
 
         FadeImage.color = new Color(0.0f, 0.0f, 0.0f, Alfa);
-        FadeText.color = new Color(255.0f, 255.0f, 255.0f, Alfa);
     }
 }
