@@ -70,4 +70,20 @@ public class PlayerPoint : MonoBehaviour
             }
         }
 	}
+
+    //プレイヤーのポイントを同期
+    //順位を決める際の比較に使うので同期しないといけない
+    void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.isWriting)
+        {
+            //データの送信
+            stream.SendNext(myPoint);
+        }
+        else
+        {
+            //データの受信
+            this.myPoint = (int)stream.ReceiveNext();
+        }
+    }
 }

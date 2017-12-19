@@ -13,15 +13,12 @@ public class RankDecision : MonoBehaviour
 
     //プレイヤーの得点と順位を決めるための変数
     public int[,] num = new int[4, 2];
-
     //得点の比較を行うかのフラグ
     private bool ChackFlag;
 
     // 初期化---------------------------------------------------------------------------------------------
     void Start()
     {
-        DontDestroyOnLoad(gameObject);
-
         ChackFlag = false;
 
         for (int i = 0; i < 4; i++)
@@ -36,40 +33,43 @@ public class RankDecision : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (SceneManager.GetActiveScene().name == "Result")
+        //シーン上のプレイヤーを取得
+        //タグでプレイヤーを識別する
+        GameObject Player1 = GameObject.FindGameObjectWithTag("Player1");
+        GameObject Player2 = GameObject.FindGameObjectWithTag("Player2");
+        GameObject Player3 = GameObject.FindGameObjectWithTag("Player3");
+        GameObject Player4 = GameObject.FindGameObjectWithTag("Player4");
+
+        //配列にプレイヤーの順番でポイントを代入
+        num[0, 0] = Player1.GetComponent<PlayerPoint>().myPoint;
+        num[1, 0] = Player2.GetComponent<PlayerPoint>().myPoint;
+        num[2, 0] = Player3.GetComponent<PlayerPoint>().myPoint;
+        num[3, 0] = Player4.GetComponent<PlayerPoint>().myPoint;
+
+        //一度だけ処理されるようにする
+        if (ChackFlag == false)
         {
-            GameObject Player1 = GameObject.FindGameObjectWithTag("Player1");
-            GameObject Player2 = GameObject.FindGameObjectWithTag("Player2");
-            GameObject Player3 = GameObject.FindGameObjectWithTag("Player3");
-            GameObject Player4 = GameObject.FindGameObjectWithTag("Player4");
-
-            num[0, 0] = Player1.GetComponent<PlayerPoint>().myPoint;
-            num[1, 0] = Player2.GetComponent<PlayerPoint>().myPoint;
-            num[2, 0] = Player3.GetComponent<PlayerPoint>().myPoint;
-            num[3, 0] = Player4.GetComponent<PlayerPoint>().myPoint;
-
-            if (ChackFlag == false)
+            //プレイヤーのポイントを比べてランクを決定
+            for (int i = 0; i < 4; i++)
             {
-                for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
                 {
-                    for (int j = 0; j < 4; j++)
+                    if (num[i, 0] > num[j, 0])
                     {
-                        if (num[i, 0] > num[j, 0])
-                        {
-                            num[i, 1]++;
-                        }
+                        num[i, 1]++;
                     }
                 }
-
-                ChackFlag = true;
             }
 
-            Player1.GetComponent<PlayerPoint>().PlayerRank = num[0, 1];
-            Player2.GetComponent<PlayerPoint>().PlayerRank = num[1, 1];
-            Player3.GetComponent<PlayerPoint>().PlayerRank = num[2, 1];
-            Player4.GetComponent<PlayerPoint>().PlayerRank = num[3, 1];
+            //フラグを操作して一度だけfor文が処理されるようにする
+            ChackFlag = true;
         }
-    }
 
+        //プレイヤーのランクを代入
+        Player1.GetComponent<PlayerPoint>().PlayerRank = num[0, 1];
+        Player2.GetComponent<PlayerPoint>().PlayerRank = num[1, 1];
+        Player3.GetComponent<PlayerPoint>().PlayerRank = num[2, 1];
+        Player4.GetComponent<PlayerPoint>().PlayerRank = num[3, 1];
+    }
 
 }

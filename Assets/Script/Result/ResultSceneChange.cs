@@ -18,13 +18,10 @@ public class ResultSceneChange : MonoBehaviour
         //エンターキーを押したら処理
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            PhotonNetwork.LeaveRoom();
-            
+            PhotonNetwork.Disconnect();
+            SceneManager.LoadScene("Title");
+
         }
     }
 
-    public void OnLeftRoom()
-    {
-        SceneManager.LoadScene("Title");
-    }
 }

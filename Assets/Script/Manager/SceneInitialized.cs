@@ -68,7 +68,7 @@ public class SceneInitialized : MonoBehaviour
     //キャラの初期位置
     //プレイヤーのIDで位置を決定させるので
     //指定人数より一つ多く宣言しておく
-    private Vector3[] pos = new Vector3[6];
+    private Vector3[] pos = new Vector3[5];
 
     //プレイヤーID取得用の変数
     private static int PlayerWhoIsIt;
@@ -90,7 +90,6 @@ public class SceneInitialized : MonoBehaviour
         pos[2] = new Vector3(24, 2, 24);
         pos[3] = new Vector3(-24, 2, -24);
         pos[4] = new Vector3(24, 2, -24);
-        pos[5] = new Vector3(24, 2, -24);
 
         //プレイヤーのIDを取得する
         PlayerWhoIsIt = PhotonNetwork.player.ID;
@@ -100,8 +99,26 @@ public class SceneInitialized : MonoBehaviour
     void Initialize()
     {
         SceneChangeFlag = true;
-        //キャラクターを生成
-        PhotonNetwork.Instantiate("robo", pos[PlayerWhoIsIt], Quaternion.identity, 0);
+
+        switch (PlayerWhoIsIt)
+        {
+            case 1:
+                //キャラクターを生成
+                PhotonNetwork.Instantiate("robo_P1", pos[1], Quaternion.identity, 0);
+                break;
+            case 2:
+                //キャラクターを生成
+                PhotonNetwork.Instantiate("robo_P2", pos[2], Quaternion.identity, 0);
+                break;
+            case 3:
+                //キャラクターを生成
+                PhotonNetwork.Instantiate("robo_P3", pos[3], Quaternion.identity, 0);
+                break;
+            case 4:
+                //キャラクターを生成
+                PhotonNetwork.Instantiate("robo_P4", pos[4], Quaternion.identity, 0);
+                break;
+        }
     }
 
 }

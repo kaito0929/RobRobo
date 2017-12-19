@@ -56,6 +56,7 @@ public class Rocketpunch : MonoBehaviour
         photonView = GetComponent<PhotonView>();
     }
 
+
     public AudioSource sound01;
     public AudioSource sound02;
 
@@ -85,18 +86,20 @@ public class Rocketpunch : MonoBehaviour
             {
                 //発射フラグをfalseにして移動を終了
                 PunchFlag = false;
+                RocketpunchObj.transform.rotation = OriginalPosObj.transform.rotation;
             }
 
             //拳がプレイヤーかステージなどにぶつかった場合に処理
-            if (rocketpunchColl.PunchCollFlag == true)
+            if (rocketpunchColl.HeadPartsPunchCollFlag == true || rocketpunchColl.BodyPartsPunchCollFlag == true||
+                rocketpunchColl.ArmPartsPunchCollFlag == true || rocketpunchColl.LegPartsPunchCollFlag == true)
             {
                 //PunchFlagをfalseにして拳の進行を終了
                 //フラグがfalseになったので元の位置へ戻るようになる
                 PunchFlag = false;
             }
-
         }
     }
+
 
     //ロケットパンチの発射を処理する関数
     void PunchShoot()
@@ -245,5 +248,6 @@ public class Rocketpunch : MonoBehaviour
         }
     }
 
+  
 
 }

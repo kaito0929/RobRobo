@@ -50,6 +50,13 @@ public class RocketpunchColl : MonoBehaviour
     //足装備
     public GameObject[] LegPartsObj = new GameObject[4];
 
+    //キャラにアタッチされるPhotonViewへの参照
+    private PhotonView photonView = null;
+    void Awake()
+    {
+        photonView = GetComponent<PhotonView>();
+    }
+    private PhotonTransformView photonTransformView;
 
 
     // 初期化----------------------------------------------------------------------------------------------
@@ -60,71 +67,93 @@ public class RocketpunchColl : MonoBehaviour
         BodyPartsPunchCollFlag = false;
         ArmPartsPunchCollFlag = false;
         LegPartsPunchCollFlag = false;
+
+        photonTransformView = GetComponent<PhotonTransformView>();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (photonView.isMine)
+        {
+            //現在の移動速度
+            Vector3 velocity = gameObject.GetComponent<Rigidbody>().velocity;
+            //移動速度を指定
+            photonTransformView.SetSynchronizedValues(velocity, 0);
+        }
     }
 
     // 衝突処理---------------------------------------------------------------------------------------------
     void OnTriggerEnter(Collider other)
     {
-        //自分の操作するキャラ意外と衝突したら処理
-        if (other.gameObject != myCharacter)
+        ////自分の操作するキャラ以外と衝突したら処理
+        //if (other.gameObject != myCharacter)
+        //{
+        //    //何かと衝突した場合にフラグをtrueに
+        //    //ステージなどとぶつかった場合のため
+        //    PunchCollFlag = true;
+        //}
+
+
+        //装備とロケットパンチが衝突した場合の処理
+        //頭装備----------------------------------------------------------------------------------
+        if (other.gameObject.tag == "Head")
         {
-            //何かと衝突した場合にフラグをtrueに
-            //ステージなどとぶつかった場合のため
-            PunchCollFlag = true;
-
-
-            //装備とロケットパンチが衝突した場合の処理
-            //頭装備----------------------------------------------------------------------------------
-            if (other.gameObject.tag=="Head")
+            //衝突した装備が自分が装着しているもの以外の場合に処理
+            if (other.gameObject != HeadPartsObj)
             {
-                //衝突した装備が自分が装着しているもの以外の場合に処理
-                if (other.gameObject != HeadPartsObj)
-                {
-                    //それぞれの部位にぶつかったフラグをtrueにする
-                    HeadPartsPunchCollFlag = true;
-                    //衝突した装備のItemRankスクリプト内の変数を代入
-                    HeadRankNum = other.GetComponent<HeadPartsMaterialChange>().MaterialNumber;
-                }
+                //それぞれの部位にぶつかったフラグをtrueにする
+                HeadPartsPunchCollFlag = true;
+                //衝突した装備のItemRankスクリプト内の変数を代入
+                HeadRankNum = other.GetComponent<HeadPartsMaterialChange>().MaterialNumber;
+                Debug.Log("HeadHit");
             }
-            //他の部位の装備の処理が以下に描かれているが
-            //基本的に内容は上記と同じなのでコメントは省略
-            //コメントを参照する場合は上記のコメントを参照してください
+        }
+        //他の部位の装備の処理が以下に描かれているが
+        //基本的に内容は上記と同じなのでコメントは省略
+        //コメントを参照する場合は上記のコメントを参照してください
 
-            // 体装備----------------------------------------------------------------------------------
-            if (other.gameObject.tag == "Body")
+        // 体装備----------------------------------------------------------------------------------
+        if (other.gameObject.tag == "Body")
+        {
+            if (other.gameObject != BodyPartsObj)
             {
                 BodyPartsPunchCollFlag = true;
                 BodyRankNum = other.GetComponent<BodyPartsMaterialChange>().MaterialNumber;
+                Debug.Log("BodyHit");
             }
+        }
 
-            // 腕装備----------------------------------------------------------------------------------
-            if (other.gameObject.tag == "Arm")
+        // 腕装備----------------------------------------------------------------------------------
+        if (other.gameObject.tag == "Arm")
+        {
+            if (other.gameObject != ArmPartsObj[0] &&
+                other.gameObject != ArmPartsObj[1] &&
+                other.gameObject != ArmPartsObj[2] &&
+                other.gameObject != ArmPartsObj[3] &&
+                other.gameObject != ArmPartsObj[4] &&
+                other.gameObject != ArmPartsObj[5])
             {
-                if (other.gameObject != ArmPartsObj[0] &&
-                    other.gameObject != ArmPartsObj[1] &&
-                    other.gameObject != ArmPartsObj[2] &&
-                    other.gameObject != ArmPartsObj[3] &&
-                    other.gameObject != ArmPartsObj[4] &&
-                    other.gameObject != ArmPartsObj[5])
-                {
-                    ArmPartsPunchCollFlag = true;
-                    ArmRankNum = other.GetComponent<ArmPartsMaterialChange>().MaterialNumber;
-                }
+                ArmPartsPunchCollFlag = true;
+                ArmRankNum = other.GetComponent<ArmPartsMaterialChange>().MaterialNumber;
+                Debug.Log("ArmHit");
             }
+        }
 
-            // 足装備----------------------------------------------------------------------------------
-            if (other.gameObject.tag == "Leg")
+        // 足装備----------------------------------------------------------------------------------
+        if (other.gameObject.tag == "Leg")
+        {
+            if (other.gameObject != LegPartsObj[0] &&
+                other.gameObject != LegPartsObj[1] &&
+                other.gameObject != LegPartsObj[2] &&
+                other.gameObject != LegPartsObj[3])
             {
                 LegPartsPunchCollFlag = true;
                 LegRankNum = other.GetComponent<LegPartsMaterialChange>().MaterialNumber;
+                Debug.Log("LegHit");
             }
         }
+
     }
 
 

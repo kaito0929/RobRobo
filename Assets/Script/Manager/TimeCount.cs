@@ -50,7 +50,7 @@ public class TimeCount : MonoBehaviour
     //  初期化---------------------------------------------------------------------------------------------
     void Start ()
     {
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
 
         GameTime = 180;
         num = 180;
@@ -84,6 +84,11 @@ public class TimeCount : MonoBehaviour
                 num--;
                 count = 0;
             }
+        }
+
+        if(Input.GetKeyDown(KeyCode.A))
+        {
+            GameTime = 10;
         }
 
         //残り時間が0以下になった場合に処理

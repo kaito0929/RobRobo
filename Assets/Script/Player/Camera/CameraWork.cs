@@ -45,6 +45,9 @@ public class CameraWork : MonoBehaviour
     //PS4コントローラーのボタンを押したかのフラグ
     private bool ButtonPushFlag;
 
+    //PunchHitスクリプト参照用変数
+    private PunchHit punchHit;
+
     //キャラにアタッチされるPhotonViewへの参照
     private PhotonView photonView = null;
     void Awake()
@@ -61,95 +64,111 @@ public class CameraWork : MonoBehaviour
         anim = GetComponent<Animator>();
 
         ButtonPushFlag = false;
+
+        punchHit = GetComponent<PunchHit>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        //リザルト画面で処理されないようにする
         if (SceneManager.GetActiveScene().name == "Main" || SceneManager.GetActiveScene().name == "MatchingRoom")
         {
             if (photonView.isMine)
             {
-                //カメラの操作用関数
-                CameraOperation();
-
-                //カメラの状態の切り替え
-                switch (cameraState)
+                //相手からの攻撃（ロケットパンチ）に当たっていない場合に処理
+                if (punchHit.PunchHitFlag == false)
                 {
-                    case CAMERA_STATE.NORMAL://通常状態のカメラ
+                    //カメラの操作用関数
+                    CameraOperation();
 
-                        //カメラの位置をある程度離しておく
-                        DistanceToPlayer = 3f;
-                        //カメラの位置はプレイヤーを中心に据える
-                        SlideDistanceM = 0.0f;
+                    //カメラの状態の切り替え
+                    switch (cameraState)
+                    {
+                        case CAMERA_STATE.NORMAL://通常状態のカメラ
 
-                        //照準モードではないのでターゲットカーソルは非表示にする
-                        //TargetCursor.gameObject.SetActive(false);
+                            //カメラの位置をある程度離しておく
+                            DistanceToPlayer = 3f;
+                            //カメラの位置はプレイヤーを中心に据える
+                            SlideDistanceM = 0.0f;
 
-                        anim.SetBool("Aim", false);
+                            //照準モードではないのでターゲットカーソルは非表示にする
+                            //TargetCursor.gameObject.SetActive(false);
 
+                            anim.SetBool("Aim", false);
 
-                        //状態の切り替え
-                        //PS4コントローラー操作-------------------------------------------------------
-                        if (Input.GetButton("R_Button"))
-                        {
-                            if (ButtonPushFlag == false)
+                            //状態の切り替え
+                            //PS4コントローラー操作-------------------------------------------------------
+                            if (Input.GetButton("R_Button"))
+                            {
+                                if (ButtonPushFlag == false)
+                                {
+                                    cameraState = CAMERA_STATE.AIM;
+                                    ButtonPushFlag = true;
+                                }
+                            }
+                            else
+                            {
+                                ButtonPushFlag = false;
+                            }
+                            //-----------------------------------------------------------------------------
+
+                            //キーボード操作--------------------------------------------------------------
+                            if (Input.GetKeyDown(KeyCode.Space))
                             {
                                 cameraState = CAMERA_STATE.AIM;
-                                ButtonPushFlag = true;
                             }
-                        }
-                        else
-                        {
-                            ButtonPushFlag = false;
-                        }
-                        //-----------------------------------------------------------------------------
-
-                        //キーボード操作--------------------------------------------------------------
-                        if (Input.GetKeyDown(KeyCode.Space))
-                        {
-                            cameraState = CAMERA_STATE.AIM;
-                        }
-                        //-----------------------------------------------------------------------------
+                            //-----------------------------------------------------------------------------
 
 
-                        break;
-                    case CAMERA_STATE.AIM://照準モード
+                            break;
+                        case CAMERA_STATE.AIM://照準モード
 
-                        //照準を合わせるモードなのでカメラをプレイヤーの近くに移動
-                        DistanceToPlayer = 1.5f;
-                        //カメラを右に少しずらす
-                        SlideDistanceM = 0.3f;
+                            //照準を合わせるモードなのでカメラをプレイヤーの近くに移動
+                            DistanceToPlayer = 1.5f;
+                            //カメラを右に少しずらす
+                            SlideDistanceM = 0.3f;
 
-                        //照準モードなのでターゲットカーソルを表示
-                        //TargetCursor.gameObject.SetActive(true);
+                            //照準モードなのでターゲットカーソルを表示
+                            //TargetCursor.gameObject.SetActive(true);
 
-                        anim.SetBool("Aim", true);
+                            anim.SetBool("Aim", true);
 
-                        //状態の切り替え
-                        //PS4コントローラー操作-------------------------------------------------------
-                        if (Input.GetButton("R_Button"))
-                        {
-                            if (ButtonPushFlag == false)
+                            //状態の切り替え
+                            //PS4コントローラー操作-------------------------------------------------------
+                            if (Input.GetButton("R_Button"))
+                            {
+                                if (ButtonPushFlag == false)
+                                {
+                                    cameraState = CAMERA_STATE.NORMAL;
+                                    ButtonPushFlag = true;
+                                }
+                            }
+                            else
+                            {
+                                ButtonPushFlag = false;
+                            }
+                            //-----------------------------------------------------------------------------
+
+                            //キーボード操作--------------------------------------------------------------
+                            if (Input.GetKeyDown(KeyCode.Space))
                             {
                                 cameraState = CAMERA_STATE.NORMAL;
-                                ButtonPushFlag = true;
                             }
-                        }
-                        else
-                        {
-                            ButtonPushFlag = false;
-                        }
-                        //-----------------------------------------------------------------------------
+                            //-----------------------------------------------------------------------------
 
-                        //キーボード操作--------------------------------------------------------------
-                        if (Input.GetKeyDown(KeyCode.Space))
-                        {
-                            cameraState = CAMERA_STATE.NORMAL;
-                        }
-                        //-----------------------------------------------------------------------------
+                            break;
+                    }
+                }
 
-                        break;
+                //カメラの状態がAIMだった場合に処理
+                if (cameraState == CAMERA_STATE.AIM)
+                {
+                    //攻撃を受けたらカメラの状態を通常状態に戻す
+                    if(punchHit.PunchHitFlag==true)
+                    {
+                        cameraState = CAMERA_STATE.NORMAL;
+                    }
                 }
             }
         }

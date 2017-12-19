@@ -87,4 +87,20 @@ public class PunchHit : MonoBehaviour
             }
         }
     }
+
+    void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.isWriting)
+        {
+            //データの送信
+            stream.SendNext(this.PunchHitFlag);
+        }
+        else
+        {
+            //データの受信
+            this.PunchHitFlag = (bool)stream.ReceiveNext();
+        }
+    }
+
+
 }

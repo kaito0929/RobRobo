@@ -88,6 +88,7 @@ public class PartsDisplay : MonoBehaviour
     {
         HeadParts.SetActive(true);
     }
+
     [PunRPC]
     private void HeadPartsHide()
     {
@@ -100,6 +101,7 @@ public class PartsDisplay : MonoBehaviour
     {
         BodyParts.SetActive(true);
     }
+
     [PunRPC]
     private void BodyPartsHide()
     {
@@ -115,6 +117,7 @@ public class PartsDisplay : MonoBehaviour
             ArmParts[i].SetActive(true);
         }
     }
+
     [PunRPC]
     private void ArmPartsHide()
     {
@@ -133,6 +136,7 @@ public class PartsDisplay : MonoBehaviour
             LegParts[i].SetActive(true);
         }
     }
+
     [PunRPC]
     private void LegPartsHide()
     {

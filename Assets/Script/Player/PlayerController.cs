@@ -26,11 +26,13 @@ public class PlayerController : MonoBehaviour
     //キャラにアタッチされるアニメーターへの参照
     private Animator anim;
 
+    //PunchHitスクリプト参照用変数
+    private PunchHit punchHit;
+
     private Vector3[] pos = new Vector3[4];
 
     //キャラにアタッチされるPhotonViewへの参照
     private PhotonView photonView = null;
-
     void Awake()
     {
         photonView = GetComponent<PhotonView>();
@@ -46,6 +48,8 @@ public class PlayerController : MonoBehaviour
         //Animatorコンポーネントを取得する
         anim = GetComponent<Animator>();
 
+        punchHit = GetComponent<PunchHit>();
+
         pos[0] = new Vector3(-155.0f, 0.0f, 195.0f);
         pos[1] = new Vector3(-155.0f, 0.0f, -195.0f);
         pos[2] = new Vector3(155.0f, 0.0f, 195.0f);
@@ -56,6 +60,8 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        //メインゲーム内かマッチングルーム内でしか行動が処理されるようにする
+        //リザルト画面で行動が出来ないようにするため
         if (SceneManager.GetActiveScene().name == "Main" || SceneManager.GetActiveScene().name == "MatchingRoom")
         {
             //持ち主でないのなら制御させない
@@ -66,24 +72,30 @@ public class PlayerController : MonoBehaviour
 
             //入力デバイスの水平軸をhで定義
             float h = 0.0f;
-            if (Input.GetAxisRaw("Horizontal") > 0.1 || Input.GetAxisRaw("Horizontal2") > 0.1)
-            {
-                h += 1f;
-            }
-            if (Input.GetAxisRaw("Horizontal") < -0.1 || Input.GetAxisRaw("Horizontal2") < -0.1)
-            {
-                h -= 1f;
-            }
-
             //入力デバイスの垂直軸をvで定義
             float v = 0.0f;
-            if (Input.GetAxisRaw("Vertical") > 0.1)
+
+            //相手からの攻撃（ロケットパンチ）が当たっていない場合に処理
+            //移動や回転が処理される
+            if (punchHit.PunchHitFlag == false)
             {
-                v += 1f;
-            }
-            if (Input.GetAxisRaw("Vertical") < -0.1)
-            {
-                v -= 1f;
+                if (Input.GetAxisRaw("Horizontal") > 0.1 || Input.GetAxisRaw("Horizontal2") > 0.1)
+                {
+                    h += 1f;
+                }
+                if (Input.GetAxisRaw("Horizontal") < -0.1 || Input.GetAxisRaw("Horizontal2") < -0.1)
+                {
+                    h -= 1f;
+                }
+
+                if (Input.GetAxisRaw("Vertical") > 0.1)
+                {
+                    v += 1f;
+                }
+                if (Input.GetAxisRaw("Vertical") < -0.1)
+                {
+                    v -= 1f;
+                }
             }
 
             //Animator側で設定している"Speed"パラメーターにvを渡す
@@ -110,7 +122,6 @@ public class PlayerController : MonoBehaviour
                 //移動速度を掛ける
                 velocity *= BackwardSpeed;
             }
-
 
             //上下のキー入力でキャラクターを移動させる
             transform.localPosition += velocity * Time.fixedDeltaTime;

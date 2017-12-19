@@ -36,8 +36,12 @@ public class GameStart : MonoBehaviour
 
     void Update()
     {
+        if (SceneManager.GetActiveScene().name == "Title")
+        {
+            PlayerNecessaryNum = 1;
+        }
     }
-
+ 
     //部屋にプレイヤーが入ってくると呼ばれるコールバック
     void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
     {

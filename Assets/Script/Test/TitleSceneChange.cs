@@ -20,7 +20,7 @@ public class TitleSceneChange : MonoBehaviour
     private TRANSITION_STATE transitionState;
 
     public GameObject Arrow;
-    private Vector3 pos;
+    public Vector3 pos;
 
     //効果音再生用変数
     private AudioSource sound01;
@@ -92,11 +92,28 @@ public class TitleSceneChange : MonoBehaviour
                     CircleButtonPushFlag = true;
                 }
 
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    //○ボタンを押すように示すテキストを非表示に
+                    ButtonPushText.gameObject.SetActive(false);
+                    //他のテキストを表示するように
+                    MatchingGoText.gameObject.SetActive(true);
+                    TutorialGoText.gameObject.SetActive(true);
+                    //どの選択肢を選んでいるか分かるようにするオブジェクト
+                    Arrow.SetActive(true);
+                    //マッチングルームへ遷移可能な状態に
+                    transitionState = TRANSITION_STATE.MATCHINGROOM;
+                    //効果音を再生
+                    sound02.PlayOneShot(sound02.clip);
+                    //ボタンは押されているのでフラグをtrueに
+                    CircleButtonPushFlag = true;
+                }
+
                 break;
             case TRANSITION_STATE.MATCHINGROOM://マッチングルームへの遷移
 
 
-                pos.y = -0.12f;
+                pos.y = 365f;
 
                 //矢印キーの上下どちらかを押した場合に処理
                 if (Input.GetAxisRaw("Vertical") == 1 || Input.GetAxisRaw("Vertical") == -1)
@@ -134,6 +151,17 @@ public class TitleSceneChange : MonoBehaviour
                     CircleButtonPushFlag = false;
                 }
 
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    if (FadeFlag == false)
+                    {
+                        //効果音を再生
+                        sound02.PlayOneShot(sound02.clip);
+                        //フラグをtrueにしてフェードアウトを実行
+                        FadeFlag = true;
+                    }
+                }
+
                 //α値が1.0fを超えたら画面が真っ暗になるので画面遷移を開始
                 if (Alfa >= 1.0f)
                 {
@@ -144,7 +172,7 @@ public class TitleSceneChange : MonoBehaviour
                 break;
             case TRANSITION_STATE.TUTORIAL://チュートリアル画面への遷移
 
-                pos.y = -2.47f;
+                pos.y = 183f;
 
                 if (Input.GetAxisRaw("Vertical") > 0.1 || Input.GetAxisRaw("Vertical") < -0.1)
                 {

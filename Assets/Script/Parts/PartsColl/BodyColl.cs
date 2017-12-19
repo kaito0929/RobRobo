@@ -13,12 +13,31 @@ public class BodyColl : MonoBehaviour
     //PlayerItemGetスクリプトの参照
     public PlayerItemGet playerItemGet;
 
+    //自キャラのロケットパンチのオブジェクト
+    public GameObject PunchObj;
+
+    //PunchHitスクリプト参照用変数
+    public PunchHit punchHit;
+
     //キャラにアタッチされるPhotonViewへの参照
     private PhotonView photonView = null;
     void Awake()
     {
         photonView = GetComponent<PhotonView>();
     }
+
+    void Update()
+    {
+        if (punchHit.PunchHitFlag == true)
+        {
+            GetComponent<BoxCollider>().enabled = false;
+        }
+        else
+        {
+            GetComponent<BoxCollider>().enabled = true;
+        }
+    }
+
 
     void OnTriggerEnter(Collider other)
     {
@@ -28,10 +47,20 @@ public class BodyColl : MonoBehaviour
             //ロケットパンチが当たった時の処理
             if (other.gameObject.tag == "Punch")
             {
-                //フラグをfalseにして装備が外れたように見せる
-                playerItemGet.BodyPartsGetFlag = false;
+                //当たっているパンチが自分のロケットパンチでなければ処理
+                if (other.gameObject != PunchObj)
+                {
+                    //フラグをfalseにして装備が外れたように見せる
+                    playerItemGet.BodyPartsGetFlag = false;
+
+                    if (punchHit.PunchHitFlag == false)
+                    {
+                        punchHit.PunchHitFlag = true;
+                    }
+                }
             }
         }
     }
+
 
 }
