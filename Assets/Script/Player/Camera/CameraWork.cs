@@ -45,6 +45,8 @@ public class CameraWork : MonoBehaviour
     //PS4コントローラーのボタンを押したかのフラグ
     private bool ButtonPushFlag;
 
+    private Image TargetCursor;
+
     //PunchHitスクリプト参照用変数
     private PunchHit punchHit;
 
@@ -66,6 +68,7 @@ public class CameraWork : MonoBehaviour
         ButtonPushFlag = false;
 
         punchHit = GetComponent<PunchHit>();
+        TargetCursor = GameObject.Find("Target").GetComponent<Image>();
     }
 
     // Update is called once per frame
@@ -93,7 +96,7 @@ public class CameraWork : MonoBehaviour
                             SlideDistanceM = 0.0f;
 
                             //照準モードではないのでターゲットカーソルは非表示にする
-                            //TargetCursor.gameObject.SetActive(false);
+                            TargetCursor.gameObject.SetActive(false);
 
                             anim.SetBool("Aim", false);
 
@@ -125,12 +128,12 @@ public class CameraWork : MonoBehaviour
                         case CAMERA_STATE.AIM://照準モード
 
                             //照準を合わせるモードなのでカメラをプレイヤーの近くに移動
-                            DistanceToPlayer = 1.5f;
+                            DistanceToPlayer = 0.0f;
                             //カメラを右に少しずらす
-                            SlideDistanceM = 0.3f;
+                            SlideDistanceM = 0.1f;
 
                             //照準モードなのでターゲットカーソルを表示
-                            //TargetCursor.gameObject.SetActive(true);
+                            TargetCursor.gameObject.SetActive(true);
 
                             anim.SetBool("Aim", true);
 
@@ -247,12 +250,12 @@ public class CameraWork : MonoBehaviour
         //回転
         cameraTransform.RotateAround(lookAt, Vector3.up, rotX);
         //カメラがプレイヤーの真上や真下にある時にそれ以上回転させないようにする
-        if (cameraTransform.forward.y > 0.9f && rotY < 0)
+        if (cameraTransform.forward.y > 0.2f && rotY < 0)
         {
             rotY = 0;
         }
 
-        if (cameraTransform.forward.y < -0.9f && rotY > 0)
+        if (cameraTransform.forward.y < -0.2f && rotY > 0)
         {
             rotY = 0;
         }
