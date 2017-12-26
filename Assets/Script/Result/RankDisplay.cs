@@ -22,6 +22,7 @@ public class RankDisplay : MonoBehaviour
     private GameObject NumberImage;
     private GameObject RankImage;
 
+
     //キャラにアタッチされるPhotonViewへの参照
     private PhotonView photonView = null;
     void Awake()
@@ -32,7 +33,7 @@ public class RankDisplay : MonoBehaviour
     // 初期化---------------------------------------------------------------------------------------------
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame

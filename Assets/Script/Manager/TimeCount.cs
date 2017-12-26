@@ -86,7 +86,7 @@ public class TimeCount : MonoBehaviour
             }
         }
 
-        if(Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.A))
         {
             GameTime = 10;
         }
@@ -98,11 +98,11 @@ public class TimeCount : MonoBehaviour
             TimeUpFlag = true;
         }
 
-        photonView.RPC("test", PhotonTargets.All);
+        photonView.RPC("Parts", PhotonTargets.All);
     }
 
     [PunRPC]
-    void test()
+    void Parts()
     {
         if (num == 180)
         {

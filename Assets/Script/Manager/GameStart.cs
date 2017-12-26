@@ -31,7 +31,7 @@ public class GameStart : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         PhotonNetwork.ConnectUsingSettings(Application.version);
 
-        PlayerNecessaryNum = 1;
+        PlayerNecessaryNum = 3;
     }
 
     void Update()

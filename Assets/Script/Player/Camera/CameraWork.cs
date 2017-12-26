@@ -19,7 +19,7 @@ public class CameraWork : MonoBehaviour
     //キャラクターにアタッチして、メインカメラの座標を取得する方法で処理するために宣言
     private Transform cameraTransform;
     //カメラとプレイヤーの距離
-    public float DistanceToPlayer = 2f;
+    public float DistanceToPlayer = 3f;
     //カメラを横にスライドさせる：プラスの時は右へ、マイナスの時は左へ
     public float SlideDistanceM = 0f;
     //注視点の高さ
@@ -98,6 +98,7 @@ public class CameraWork : MonoBehaviour
                             //照準モードではないのでターゲットカーソルは非表示にする
                             TargetCursor.gameObject.SetActive(false);
 
+                            //構えのモーションを止めて通常の状態に戻す
                             anim.SetBool("Aim", false);
 
                             //状態の切り替え
@@ -135,6 +136,7 @@ public class CameraWork : MonoBehaviour
                             //照準モードなのでターゲットカーソルを表示
                             TargetCursor.gameObject.SetActive(true);
 
+                            //構えのモーションを再生
                             anim.SetBool("Aim", true);
 
                             //状態の切り替え

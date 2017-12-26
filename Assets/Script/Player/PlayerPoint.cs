@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 //==============================================
 //プレイヤーの総合得点と順位を決めるスクリプト
@@ -29,6 +30,13 @@ public class PlayerPoint : MonoBehaviour
     //キャラにアタッチされるアニメーターへの参照
     private Animator anim;
 
+    //ポイントを表示するImage
+    private Image image0;//一の位
+    private Image image10;//十の位
+
+    //数字のスプライトを格納する変数
+    public Sprite[] spriteArray = new Sprite[10];//配列で10個作る
+
     //キャラにアタッチされるPhotonViewへの参照
     private PhotonView photonView = null;
     void Awake()
@@ -43,6 +51,10 @@ public class PlayerPoint : MonoBehaviour
         PlayerRank = 0;
         //Animatorコンポーネントを取得する
         anim = GetComponent<Animator>();
+
+        //シーン上のImageを取得
+        image0 = GameObject.Find("PointImage1").GetComponent<Image>();
+        image10 = GameObject.Find("PointImage10").GetComponent<Image>();
     }
 
     // Update is called once per frame
@@ -54,11 +66,20 @@ public class PlayerPoint : MonoBehaviour
             myPoint = headPartsMaterialChange.HeadPartsPoint + bodyPartsMaterialChange.BodyPartsPoint +
                   armPartsMaterialChange.ArmPartsPoint + legPartsMaterialChange.LegPartsPoint;
 
+            //画面上のポイント表示用処理--------------------------------------------
+            int a = myPoint / 10 % 10;
+            int b = myPoint % 10;
+            //それぞれの位のImageに数字のスプライトを入れる
+            image0.sprite = spriteArray[b];
+            image10.sprite = spriteArray[a];
+            //----------------------------------------------------------------------
+
+
             //リザルト画面でのみ処理するように
             if (SceneManager.GetActiveScene().name == "Result")
             {
                 //順位が一番であれば勝利ポーズ
-                if (PlayerRank == 3)
+                if (PlayerRank >= 3)
                 {
                     anim.SetBool("Victory", true);
                 }
